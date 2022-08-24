@@ -10,11 +10,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator } from "react-native";
 import IUserCredentiasl from "../interface/user";
 
-interface User {
-    name: string;
-    email: string;
-}
-
 interface IUser {
     id: number | string;
     name: string;
@@ -35,12 +30,6 @@ interface IUser {
     created_at: Date | string;
     updated_at: Date | string;
 }
-/* interface AutContextData {
-    signed: boolean;
-    user: object;
-    signIn(): Promise<void>;
-}
-const AuthContext = createContext<AutContextData>({} as AutContextData); */
 
 const AuthProvider: React.FC = ({ children }) => {
     const [user, setUser] = useState<IUser | null>(null);
@@ -65,21 +54,7 @@ const AuthProvider: React.FC = ({ children }) => {
     })
 
     async function signIn(credentials: IUserCredentiasl) {
-        //const response = await logged.login();
         const response = await api.post('/session', credentials);
-        //console.log(response.data)
-        /* axios.post(api + '/session', credentials)
-            .then(response => {
-                console.log(response)
-                console.log(response.data)
-            })
-            .catch((error) => console.warn("fetch error:", error))
-            .then((response) => {
-                console.log(response)
-            }) */
-        //const { token, user } = response.data;
-        //const { token, user } = response;
-        //console.log(response.data);
         setUser(response.data.user)
         api.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
         setToken(response.data.token);
